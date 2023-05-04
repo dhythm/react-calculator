@@ -23,3 +23,7 @@ echo {}> .prettierrc.json
 npm install @mantine/core @mantine/hooks @mantine/form @emotion/react
 npm install @tabler/icons-react
 ```
+
+## Sample
+
+![Sample screen](./images/screen.png)
