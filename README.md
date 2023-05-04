@@ -1,4 +1,4 @@
-# Key Value Calculator
+# React Calculator
 
 ## Setting up
 
