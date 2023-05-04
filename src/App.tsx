@@ -23,7 +23,7 @@ const actions: Record<Action, string> = {
 function App() {
   const form = useForm({
     initialValues: {
-      text: "",
+      contents: [{ key: randomId(), name: "", value: "" }],
       items: [
         { key: randomId(), name: "", value: "", unit: "", action: "add" },
       ],
@@ -39,11 +39,37 @@ function App() {
   return (
     <Box style={{ padding: 16 }}>
       <form onSubmit={form.onSubmit((values) => setData(values))}>
-        <TextInput
-          label="text"
-          sx={{ flexGrow: 1 }}
-          {...form.getInputProps("text")}
-        />
+        {form.values.contents.map((item, idx) => (
+          <Group key={item.key}>
+            <TextInput
+              label="name"
+              sx={{ flexGrow: 1 }}
+              {...form.getInputProps(`contents.${idx}.name`)}
+            />
+            <TextInput
+              label="value"
+              sx={{ flexGrow: 1 }}
+              {...form.getInputProps(`contents.${idx}.value`)}
+            />
+            <ActionIcon size="lg" variant="hover">
+              {form.values.contents.length === idx + 1 ? (
+                <IconCirclePlus
+                  onClick={() =>
+                    form.insertListItem("contents", {
+                      key: randomId(),
+                      name: "",
+                      value: "",
+                    })
+                  }
+                />
+              ) : (
+                <IconCircleMinus
+                  onClick={() => form.removeListItem("contents", idx)}
+                />
+              )}
+            </ActionIcon>
+          </Group>
+        ))}
         {form.values.items.map((item, idx) => (
           <Group key={item.key} mt="xs">
             <TextInput
@@ -98,11 +124,11 @@ function App() {
       </form>
       <Box mt="md">
         {form.values.items
-          .flatMap((item) =>
+          .flatMap((item, idx) =>
             item.value
-              ? `${actions[item.action]} ${item.name} ${item.value} (${
-                  item.unit
-                })`
+              ? `${idx !== 0 ? actions[item.action] : ""} ${item.name} ${
+                  item.value
+                } (${item.unit})`
               : []
           )
           .join(" ")}
