@@ -90,7 +90,11 @@ function App() {
       <Box mt="md">
         {form.values.items
           .flatMap((item) =>
-            item.value ? `${actions[item.action]} ${item.value}` : []
+            item.value
+              ? `${actions[item.action]} ${item.name} ${item.value} (${
+                  item.unit
+                })`
+              : []
           )
           .join(" ")}
       </Box>
