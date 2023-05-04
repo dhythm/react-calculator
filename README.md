@@ -1,5 +1,7 @@
 # React Calculator
 
+Calculator App created by React via Vite.
+
 ## Setting up
 
 ### Create App
