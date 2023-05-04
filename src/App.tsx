@@ -2,6 +2,7 @@ import {
   ActionIcon,
   Box,
   Button,
+  Flex,
   Group,
   Select,
   TextInput,
@@ -9,7 +10,7 @@ import {
 import { useForm } from "@mantine/form";
 import { randomId } from "@mantine/hooks";
 import { IconCirclePlus, IconCircleMinus } from "@tabler/icons-react";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 type Action = "add" | "subtract" | "multiply" | "divide";
 const actions: Record<Action, string> = {
@@ -22,6 +23,7 @@ const actions: Record<Action, string> = {
 function App() {
   const form = useForm({
     initialValues: {
+      text: "",
       items: [
         { key: randomId(), name: "", value: "", unit: "", action: "add" },
       ],
@@ -31,26 +33,32 @@ function App() {
   const tokens = form.values.items.flatMap((item) =>
     item.value ? [actions[item.action], item.value] : []
   );
+  const [data, setData] = useState({});
   const result = useMemo(() => calculateTokens(tokens), [tokens]);
 
   return (
     <Box style={{ padding: 16 }}>
-      <form onSubmit={form.onSubmit((values) => console.log(values))}>
+      <form onSubmit={form.onSubmit((values) => setData(values))}>
+        <TextInput
+          label="text"
+          sx={{ flexGrow: 1 }}
+          {...form.getInputProps("text")}
+        />
         {form.values.items.map((item, idx) => (
           <Group key={item.key} mt="xs">
             <TextInput
               label="name"
-              sx={{ flex: 1 }}
+              sx={{ flexGrow: 1 }}
               {...form.getInputProps(`items.${idx}.name`)}
             />
             <TextInput
               label="value"
-              sx={{ flex: 1 }}
+              sx={{ flexGrow: 1 }}
               {...form.getInputProps(`items.${idx}.value`)}
             />
             <TextInput
               label="unit"
-              sx={{ flex: 1 }}
+              sx={{ flexGrow: 1 }}
               {...form.getInputProps(`items.${idx}.unit`)}
             />
             <Select
@@ -59,6 +67,7 @@ function App() {
                 value,
                 label,
               }))}
+              style={{ width: 80 }}
               disabled={idx === 0}
               {...form.getInputProps(`items.${idx}.action`)}
             />
@@ -99,6 +108,7 @@ function App() {
           .join(" ")}
       </Box>
       <Box>= {result}</Box>
+      <Box>{JSON.stringify(data)}</Box>
     </Box>
   );
 }
