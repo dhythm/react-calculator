@@ -6,6 +6,7 @@ import {
   Group,
   Select,
   TextInput,
+  Textarea,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { randomId } from "@mantine/hooks";
@@ -27,6 +28,7 @@ function App() {
       items: [
         { key: randomId(), name: "", value: "", unit: "", action: "add" },
       ],
+      memo: "",
     },
   });
 
@@ -118,6 +120,11 @@ function App() {
             </ActionIcon>
           </Group>
         ))}
+        <Textarea
+          label="memo"
+          sx={{ flexGrow: 1 }}
+          {...form.getInputProps("memo")}
+        />
         <Group position="left" mt="md">
           <Button type="submit">Calculate</Button>
         </Group>
